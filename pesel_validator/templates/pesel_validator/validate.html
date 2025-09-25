@@ -13,7 +13,7 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    
+
                     <div class="mb-4">
                         <label for="{{ form.pesel.id_for_label }}" class="form-label">
                             {{ form.pesel.label }}
@@ -22,27 +22,29 @@
                         {% if form.pesel.help_text %}
                             <div class="form-text">{{ form.pesel.help_text }}</div>
                         {% endif %}
-                        {% if form.pesel.errors %}
-                            <div class="text-danger mt-2">
-                                {% for error in form.pesel.errors %}
-                                    <small>{{ error }}</small>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
                     </div>
-                    
+
                     <div class="text-center mb-4">
                         <button type="submit" class="btn btn-success btn-lg">
                             <i class="fas fa-check-circle"></i> Sprawdź PESEL
                         </button>
                     </div>
+
+                    {% if form.pesel.errors %}
+                        {% for error in form.pesel.errors %}
+                            <div class="error-message">
+                                <h6><i class="fas fa-times-circle text-danger"></i> Błąd walidacji</h6>
+                                <p>{{ error }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </form>
 
                 {% if result %}
                     {% if result.is_valid %}
                         <div class="success-message">
                             <h5><i class="fas fa-check-circle text-success"></i> PESEL jest prawidłowy!</h5>
-                            
+
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <div class="pesel-info">
@@ -63,7 +65,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <div class="pesel-info">
@@ -91,18 +93,18 @@
                     <h6>Informacje o numerze PESEL:</h6>
                     <ul class="text-muted">
                         <li>PESEL składa się z 11 cyfr</li>
-                        <li>Pierwsze 6 cyfr to data urodzenia (RRMMDD)</li>
+                        <li>Pierwsze 6 cyfr to data urodzenia (RRMMDD z zakodowanym stuleciem)</li>
                         <li>Cyfry 7-9 to numer serii</li>
                         <li>Cyfra 10 określa płeć (parzysta = kobieta, nieparzysta = mężczyzna)</li>
                         <li>Cyfra 11 to cyfra kontrolna</li>
                     </ul>
-                    
+
                     <div class="mt-3">
                         <h6>Przykłady prawidłowych numerów PESEL:</h6>
                         <ul class="font-monospace text-muted">
-                            <li>85030812345 (kobieta, ur. 08.03.1985)</li>
-                            <li>92071512347 (mężczyzna, ur. 15.07.1992)</li>
-                            <li>03261098765 (mężczyzna, ur. 10.06.2003)</li>
+                            <li>44051401359 (kobieta, ur. 14.05.1944)</li>
+                            <li>85030812353 (mężczyzna, ur. 08.03.1985)</li>
+                            <li>92071512346 (kobieta, ur. 15.07.1992)</li>
                         </ul>
                     </div>
                 </div>

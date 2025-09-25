@@ -26,7 +26,7 @@
                     <div class="col-md-6">
                         <h5>🔄 Tekst przetworzony:</h5>
                         <div class="result-container">
-                            <pre style="white-space: pre-wrap; font-family: inherit;">{{ processed_text }}</pre>
+                            <pre id="processed-text" style="white-space: pre-wrap; font-family: inherit;">{{ processed_text }}</pre>
                         </div>
                     </div>
                 </div>
@@ -46,13 +46,28 @@
     </div>
 </div>
 
+<!-- Toast notification (colored, bottom-right) -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="fas fa-check-circle me-2"></i> Tekst został skopiowany do schowka!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 <script>
 function copyToClipboard(elementId) {
     const text = `{{ processed_text|escapejs }}`;
     navigator.clipboard.writeText(text).then(function() {
-        alert('Tekst został skopiowany do schowka!');
+        const toastElement = document.getElementById('copyToast');
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
     }, function(err) {
         console.error('Błąd kopiowania: ', err);
+        alert('Błąd kopiowania do schowka');
     });
 }
 

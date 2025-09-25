@@ -2,17 +2,19 @@ from django import forms
 import re
 
 class PESELForm(forms.Form):
+    PESEL_LENGTH_ERROR = 'PESEL musi składać się z dokładnie 11 cyfr'
     pesel = forms.CharField(
         label='Numer PESEL',
-        max_length=11,
-        min_length=11,
         help_text='Wprowadź 11-cyfrowy numer PESEL',
         widget=forms.TextInput(attrs={
             'class': 'form-control form-control-lg text-center',
-            'placeholder': '85030812345',
-            'pattern': '[0-9]{11}',
-            'maxlength': '11'
-        })
+            'placeholder': '',
+            'maxlength': '11',
+            'inputmode': 'numeric'
+        }),
+        error_messages={
+            'required': 'Numer PESEL jest wymagany',
+        }
     )
 
     def clean_pesel(self):
@@ -21,8 +23,15 @@ class PESELForm(forms.Form):
         if not pesel:
             raise forms.ValidationError('Numer PESEL jest wymagany')
 
+        # Remove any whitespace
+        pesel = pesel.strip()
+
+        # Check length
+        if len(pesel) != 11:
+            raise forms.ValidationError(self.PESEL_LENGTH_ERROR)
+
         # Check if contains only digits
-        if not re.match(r'^\d{11}$', pesel):
-            raise forms.ValidationError('PESEL musi składać się z dokładnie 11 cyfr')
+        if not pesel.isdigit():
+            raise forms.ValidationError(self.PESEL_LENGTH_ERROR)
 
         return pesel

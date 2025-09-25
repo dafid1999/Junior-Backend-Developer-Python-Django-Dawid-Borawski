@@ -20,7 +20,7 @@
                     {% endfor %}
                 {% endif %}
 
-                <form method="post" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
 
                     <div class="upload-area mb-3">
@@ -41,7 +41,7 @@
 
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-magic"></i> Przetworz tekst
+                            <i class="fas fa-magic"></i> Przetwórz tekst
                         </button>
                     </div>
                 </form>
@@ -59,4 +59,21 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[type="file"]');
+    const uploadTitle = document.querySelector('.upload-area h5');
+    const originalTitle = uploadTitle.textContent;
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            const fileName = this.files[0].name;
+            uploadTitle.innerHTML = `<i class="fas fa-file-alt text-success"></i> Wybrano plik: <strong>${fileName}</strong>`;
+        } else {
+            uploadTitle.textContent = originalTitle;
+        }
+    });
+});
+</script>
 {% endblock %}
