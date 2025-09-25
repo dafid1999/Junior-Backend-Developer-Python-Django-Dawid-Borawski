@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Walidator PESEL - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>🔍 Walidator numeru PESEL</h3>
+                <p class="mb-0">Sprawdź poprawność numeru PESEL i uzyskaj informacje o dacie urodzenia oraz płci</p>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.pesel.id_for_label }}" class="form-label">
+                            {{ form.pesel.label }}
+                        </label>
+                        {{ form.pesel }}
+                        {% if form.pesel.help_text %}
+                            <div class="form-text">{{ form.pesel.help_text }}</div>
+                        {% endif %}
+                        {% if form.pesel.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.pesel.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-check-circle"></i> Sprawdź PESEL
+                        </button>
+                    </div>
+                </form>
+
+                {% if result %}
+                    {% if result.is_valid %}
+                        <div class="success-message">
+                            <h5><i class="fas fa-check-circle text-success"></i> PESEL jest prawidłowy!</h5>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="pesel-info">
+                                        <h6><i class="fas fa-id-card"></i> Numer PESEL:</h6>
+                                        <p class="h4 font-monospace">{{ result.pesel }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="pesel-info">
+                                        <h6><i class="fas fa-venus-mars"></i> Płeć:</h6>
+                                        <p class="h5">
+                                            {% if result.gender == "Mężczyzna" %}
+                                                <i class="fas fa-mars text-primary"></i> {{ result.gender }}
+                                            {% else %}
+                                                <i class="fas fa-venus text-danger"></i> {{ result.gender }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="pesel-info">
+                                        <h6><i class="fas fa-calendar-alt"></i> Data urodzenia:</h6>
+                                        <p class="h5">{{ result.birth_date|date:"d.m.Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="pesel-info">
+                                        <h6><i class="fas fa-birthday-cake"></i> Wiek:</h6>
+                                        <p class="h5">{{ result.age }} lat</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="error-message">
+                            <h5><i class="fas fa-times-circle text-danger"></i> PESEL jest nieprawidłowy</h5>
+                            <p><strong>Błąd:</strong> {{ result.error }}</p>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <div class="mt-4">
+                    <h6>Informacje o numerze PESEL:</h6>
+                    <ul class="text-muted">
+                        <li>PESEL składa się z 11 cyfr</li>
+                        <li>Pierwsze 6 cyfr to data urodzenia (RRMMDD)</li>
+                        <li>Cyfry 7-9 to numer serii</li>
+                        <li>Cyfra 10 określa płeć (parzysta = kobieta, nieparzysta = mężczyzna)</li>
+                        <li>Cyfra 11 to cyfra kontrolna</li>
+                    </ul>
+                    
+                    <div class="mt-3">
+                        <h6>Przykłady prawidłowych numerów PESEL:</h6>
+                        <ul class="font-monospace text-muted">
+                            <li>85030812345 (kobieta, ur. 08.03.1985)</li>
+                            <li>92071512347 (mężczyzna, ur. 15.07.1992)</li>
+                            <li>03261098765 (mężczyzna, ur. 10.06.2003)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

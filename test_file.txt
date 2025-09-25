@@ -1,0 +1,12 @@
+Hello world! This is a test file for the text processing functionality.
+The application should scramble the letters in the middle of each word while keeping the first and last letters in their original positions.
+
+For example:
+- "programming" might become "pgrammorng" or "prgramomng"
+- "django" might become "djgano" or "djanog"
+- "python" might become "ptyhon" or "pthyon"
+
+Punctuation marks, spaces, and special characters should remain unchanged.
+Numbers like 123 and short words like "is", "a", "an" should stay the same.
+
+This is quite an interesting algorithm that demonstrates how our brains can still read scrambled text as long as the first and last letters are in the right place!

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Wynik Przetwarzania - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h3>✅ Tekst został przetworzony!</h3>
+                    <p class="mb-0">Plik: <strong>{{ filename }}</strong></p>
+                </div>
+                <a href="{% url 'text_processor:upload' %}" class="btn btn-primary">
+                    Przetwórz kolejny plik
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>📄 Tekst oryginalny:</h5>
+                        <div class="result-container">
+                            <pre style="white-space: pre-wrap; font-family: inherit;">{{ original_text }}</pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>🔄 Tekst przetworzony:</h5>
+                        <div class="result-container">
+                            <pre style="white-space: pre-wrap; font-family: inherit;">{{ processed_text }}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-secondary" onclick="copyToClipboard('processed-text')">
+                            <i class="fas fa-copy"></i> Skopiuj przetworzony tekst
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="downloadText()">
+                            <i class="fas fa-download"></i> Pobierz jako plik
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(elementId) {
+    const text = `{{ processed_text|escapejs }}`;
+    navigator.clipboard.writeText(text).then(function() {
+        alert('Tekst został skopiowany do schowka!');
+    }, function(err) {
+        console.error('Błąd kopiowania: ', err);
+    });
+}
+
+function downloadText() {
+    const text = `{{ processed_text|escapejs }}`;
+    const element = document.createElement('a');
+    const file = new Blob([text], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = 'processed_{{ filename|escapejs }}';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+</script>
+{% endblock %}

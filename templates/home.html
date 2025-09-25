@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Witaj w aplikacji Django!</h1>
+            <p class="lead">Ta aplikacja zawiera rozwiązania dwóch zadań rekrutacyjnych:</p>
+            <hr class="my-4">
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">📝 Zadanie 1: Przetwarzanie Tekstu</h5>
+                            <p class="card-text">
+                                Prześlij plik tekstowy, a aplikacja przemieszuje litery w środku każdego wyrazu,
+                                pozostawiając pierwszą i ostatnią literę na swoich miejscach.
+                            </p>
+                            <a class="btn btn-primary" href="{% url 'text_processor:upload' %}" role="button">
+                                Przejdź do przetwarzania tekstu
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">🔍 Zadanie 2: Walidator PESEL</h5>
+                            <p class="card-text">
+                                Wprowadź numer PESEL, a aplikacja zweryfikuje jego poprawność oraz
+                                wyświetli informacje o dacie urodzenia i płci.
+                            </p>
+                            <a class="btn btn-success" href="{% url 'pesel_validator:validate' %}" role="button">
+                                Przejdź do walidatora PESEL
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

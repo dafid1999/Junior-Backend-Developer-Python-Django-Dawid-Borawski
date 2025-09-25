@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Przetwarzanie Tekstu - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>📝 Przetwarzanie Tekstu</h3>
+                <p class="mb-0">Prześlij plik tekstowy, a litery w środku każdego wyrazu zostaną przemieszane</p>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="upload-area mb-3">
+                        <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-muted"></i>
+                        <h5>Prześlij plik tekstowy</h5>
+                        {{ form.file }}
+                        {% if form.file.help_text %}
+                            <small class="form-text text-muted">{{ form.file.help_text }}</small>
+                        {% endif %}
+                        {% if form.file.errors %}
+                            <div class="text-danger mt-2">
+                                {% for error in form.file.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic"></i> Przetworz tekst
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-4">
+                    <h6>Jak to działa?</h6>
+                    <ul class="text-muted">
+                        <li>Pierwsza i ostatnia litera każdego wyrazu pozostają na swoim miejscu</li>
+                        <li>Litery w środku wyrazu są losowo przemieszane</li>
+                        <li>Interpunkcja i spacje pozostają niezmienione</li>
+                        <li>Przykład: "Hello world" → "Hllo wrold" (może być różnie za każdym razem)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
